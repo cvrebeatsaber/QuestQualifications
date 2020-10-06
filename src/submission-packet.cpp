@@ -1,0 +1,106 @@
+#include "submission-packet.hpp"
+#include "logging.hpp"
+#include "GlobalNamespace/IBeatmapLevel.hpp"
+#include "GlobalNamespace/IDifficultyBeatmap.hpp"
+#include "GlobalNamespace/RankModel.hpp"
+#include "GlobalNamespace/RankModel_Rank.hpp"
+#include "include/cryptopp/sha.h"
+#include "include/cryptopp/hex.h"
+#include <sstream>
+#define RAPIDJSON_HAS_STDSTRING 1
+#include "beatsaber-hook/shared/config/rapidjson-utils.hpp"
+
+#include "main.hpp"
+#include "util.hpp"
+
+#ifndef PRECISION
+#define PRECISION 10000
+#endif
+
+#define GAME_VERSION "1.11.1"
+
+SubmissionPacket::SubmissionPacket() {
+    version = GAME_VERSION;
+    hash = Hash();
+}
+
+SubmissionPacket::SubmissionPacket(GlobalNamespace::LevelCompletionResults* results, std::string_view pin, GlobalNamespace::GameplayCoreSceneSetupData* data) {
+    getLogger().debug("SubmissionPacket Level with name: %s", to_utf8(csstrtostr(data->difficultyBeatmap->get_level()->get_songName())).c_str());
+    getLogger().debug("SubmissionPacket with score: %u and rank: %s", results->rawScore, Util::RankStr(results->rank).c_str());
+    getLogger().debug("SubmissionPacket with acc: %f", getAccuracy());
+
+    this->pin.assign(pin.data());
+    // Cheat for now
+    characteristic = "Standard";
+    score = results->modifiedScore;
+    accuracy = roundf(getAccuracy() * PRECISION) / PRECISION;
+    rank = Util::RankStr(results->rank);
+    difficulty = data->difficultyBeatmap->get_difficultyRank();
+    version = GAME_VERSION;
+    levelId = to_utf8(csstrtostr(data->difficultyBeatmap->get_level()->get_levelID()));
+    Util::PopulateJsonProperties(mapInfo, data->difficultyBeatmap->get_level());
+    Util::PopulateJsonProperties(mapInfo, data->difficultyBeatmap);
+    Util::PopulateJsonProperties(stats, results);
+    hash = Hash();
+}
+
+std::string SubmissionPacket::Hash() {
+    CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
+    // if accuracy is 0.0, or 0.00, or 0.000, or 0.0000
+    // we need to write it as 0 in the hash
+    std::ostringstream str;
+    str << accuracy;
+    auto message = *Util::ReadSecret() + pin + std::to_string(score) + str.str() + std::to_string(difficulty) + version + levelId;
+    CryptoPP::SHA256().CalculateDigest(digest, reinterpret_cast<const CryptoPP::byte*>(&message[0]), message.size());
+
+    std::string ret;
+    getLogger().debug("Hashing: %s", message.c_str());
+    CryptoPP::HexEncoder encoder;
+    encoder.Attach(new CryptoPP::StringSink(ret));
+    encoder.Put(digest, sizeof(digest));
+    encoder.MessageEnd();
+
+    return ret;
+}
+
+void Saturate(std::unordered_map<std::string, std::string>& map, rapidjson::Value& obj, rapidjson::MemoryPoolAllocator<>& alloc) {
+    obj.MemberReserve(map.size(), alloc);
+    for (auto itr : map) {
+        obj.AddMember(rapidjson::Value(itr.first, alloc).Move(), rapidjson::Value(itr.second, alloc).Move(), alloc);
+    }
+}
+
+std::string SubmissionPacket::ToJson() {
+    rapidjson::Document d;
+    // Make it a rapidjson object
+    d.Parse("{}");
+    auto& alloc = d.GetAllocator();
+    d.AddMember("pin", rapidjson::GenericStringRef<char>(pin.c_str()), alloc);
+    d.AddMember("score", score, alloc);
+    d.AddMember("accuracy", accuracy, alloc);
+    d.AddMember("rank", rapidjson::GenericStringRef<char>(rank.c_str()), alloc);
+    d.AddMember("characteristic", rapidjson::GenericStringRef<char>(characteristic.c_str()), alloc);
+    d.AddMember("difficulty", difficulty, alloc);
+    d.AddMember("version", rapidjson::GenericStringRef<char>(version.c_str()), alloc);
+    d.AddMember("pluginVersion", VERSION, alloc);
+    d.AddMember("levelId", rapidjson::GenericStringRef<char>(levelId.c_str()), alloc);
+    rapidjson::Value val(rapidjson::kObjectType);
+    Saturate(mapInfo, val, alloc);
+    d.AddMember("mapInfo", val, alloc);
+    rapidjson::Value val2(rapidjson::kObjectType);
+    Saturate(stats, val2, alloc);
+    d.AddMember("stats", val2, alloc);
+    d.AddMember("hash", rapidjson::GenericStringRef<char>(hash.c_str()), alloc);
+    rapidjson::StringBuffer buf;
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buf);
+    if (!d.Accept(writer)) {
+        getLogger().critical("Serialization of packet failed!");
+    }
+    getLogger().debug("Packet serialized: %s", buf.GetString());
+    return buf.GetString();
+}
+
+void SubmissionPacket::Serialize() {
+    auto duration = std::chrono::system_clock::now().time_since_epoch();
+    writefile(string_format("/sdcard/packet_%u.tmp", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count()), ToJson());
+}

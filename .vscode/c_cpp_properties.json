@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "defines": [
+        "VERSION=\"0.1.0\"",
+        "__GNUC__",
+        "__aarch64__",
+        "ID=\"CVREPlugin\""
+      ],
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/extern",
+        "c:/android-ndk-r21d/**",
+        "${workspaceFolder}/shared"
+      ],
+      "name": "Quest",
+      "cStandard": "c11",
+      "cppStandard": "c++20",
+      "intelliSenseMode": "clang-x64"
+    }
+  ],
+  "version": 4
+}
