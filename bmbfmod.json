@@ -1,11 +1,10 @@
 {
   "id": "CVREPlugin",
-  "name": "Hitscore Visualizer",
+  "name": "CVREPlugin",
   "version": "0.1.0",
   "author": "Sc2ad",
   "description": [
-    "It visualizes your scores with fancy colors or even images!",
-    "Now a completely standalone mod, based off of Ratsby's original PC mod."
+    "CVRE Qualifications mod!"
   ],
   "category": "Gameplay",
   "gameVersion": "1.11.1",
