@@ -108,7 +108,7 @@ MAKE_HOOK_OFFSETLESS(SoloFreePlayFlowCoordinator_LevelSelectionFlowCoordinatorDi
     globalManager->levelSelectionFlowCoordinator = self;
     if (firstActivation) {
         if (globalManager->notificationBox) {
-            globalManager->notificationBox->DisplayNotification("Welcome to CVRE!");
+            globalManager->notificationBox->CreateNotification("Welcome to CVRE!");
         }
     }
 }

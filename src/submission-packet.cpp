@@ -48,9 +48,7 @@ std::string SubmissionPacket::Hash() {
     CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
     // if accuracy is 0.0, or 0.00, or 0.000, or 0.0000
     // we need to write it as 0 in the hash
-    std::ostringstream str;
-    str << accuracy;
-    auto message = *Util::ReadSecret() + pin + std::to_string(score) + str.str() + std::to_string(difficulty) + version + levelId;
+    auto message = *Util::ReadSecret() + pin + std::to_string(score) + string_format("%.4f", accuracy) + std::to_string(difficulty) + version + levelId;
     CryptoPP::SHA256().CalculateDigest(digest, reinterpret_cast<const CryptoPP::byte*>(&message[0]), message.size());
 
     std::string ret;
@@ -69,6 +67,26 @@ void Saturate(std::unordered_map<std::string, std::string>& map, rapidjson::Valu
         obj.AddMember(rapidjson::Value(itr.first, alloc).Move(), rapidjson::Value(itr.second, alloc).Move(), alloc);
     }
 }
+
+template<typename Stream>
+class CustomWriter : public rapidjson::PrettyWriter<Stream> {
+    public:
+    CustomWriter(rapidjson::StringBuffer& b) : rapidjson::PrettyWriter<Stream>(b), b_(&b) {}
+    bool Double(double d) {
+        char buffer[25] = {'\0'};
+        auto count = snprintf(buffer, sizeof(buffer), "%.4f", d);
+        this->PrettyPrefix(rapidjson::kNumberType);
+        PutReserve(*b_, static_cast<size_t>(count));
+        int i = 0;
+        for (char* p = buffer; i < count; ++i) {
+            PutUnsafe(*b_, static_cast<typename Stream::Ch>(*p));
+            ++p;
+        }
+        return true;
+    }
+    private:
+    rapidjson::StringBuffer* b_;
+};
 
 std::string SubmissionPacket::ToJson() {
     rapidjson::Document d;
@@ -92,7 +110,7 @@ std::string SubmissionPacket::ToJson() {
     d.AddMember("stats", val2, alloc);
     d.AddMember("hash", rapidjson::GenericStringRef<char>(hash.c_str()), alloc);
     rapidjson::StringBuffer buf;
-    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buf);
+    CustomWriter<rapidjson::StringBuffer> writer(buf);
     if (!d.Accept(writer)) {
         getLogger().critical("Serialization of packet failed!");
     }
@@ -102,5 +120,8 @@ std::string SubmissionPacket::ToJson() {
 
 void SubmissionPacket::Serialize() {
     auto duration = std::chrono::system_clock::now().time_since_epoch();
-    writefile(string_format("/sdcard/packet_%u.tmp", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count()), ToJson());
+    if (!direxists("/sdcard/cvre_packets/")) {
+        mkpath("/sdcard/cvre_packets/");
+    }
+    writefile(string_format("/sdcard/cvre_packets/packet_%u.tmp", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count()), ToJson());
 }

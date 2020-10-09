@@ -66,7 +66,9 @@ void CVRE::Notification::AddNotification(std::string_view message) {
         return;
     }
     cppResetTime = std::chrono::system_clock::now() + std::chrono::seconds(SECONDS_SHOWING);
-    notificationBox->set_text(notificationBox->get_text()->Concat(il2cpp_utils::createcsstr(message)));
+    // Yes, this needs to be C++ strings, due to an oversight with TArgs forwarding on C# .Concat
+    auto existingMessage = to_utf8(csstrtostr(notificationBox->get_text()));
+    notificationBox->set_text(il2cpp_utils::createcsstr(existingMessage.append(message)));
     validReset = true;
 }
 void CVRE::Notification::ResetNotification() {

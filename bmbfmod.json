@@ -34,7 +34,7 @@
     {
       "type": "HookModLibrary",
       "installAction": {
-        "installLibraryFile": "libcustom_types_0_2_5.so"
+        "installLibraryFile": "libcustom_types.so"
       }
     },
     {

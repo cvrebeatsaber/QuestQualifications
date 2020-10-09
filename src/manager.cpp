@@ -18,7 +18,7 @@ DEFINE_CLASS(CVRE::Manager);
 void CVRE::Manager::DisplayKeyboard() {
     getLogger().debug("Displaying keyboard!");
     // Stale keyboardView reference should be auto-gc'd
-    keyboardView = QuestUI::BeatSaberUI::CreateViewController<QuestUI::KeyboardViewController*>();
+    keyboardView = QuestUI::BeatSaberUI::CreateViewController<QuestUI::KeyboardController*>();
     keyboardView->add_confirmPressed(reinterpret_cast<System::Action_1<Il2CppString*>*>(RET_V_UNLESS(
         il2cpp_utils::MakeAction(il2cpp_functions::class_get_type(classof(System::Action_1<Il2CppString*>*)), this, +[](CVRE::Manager* self, Il2CppString* input) {
             self->keyboard_confirm(input);
@@ -29,6 +29,7 @@ void CVRE::Manager::DisplayKeyboard() {
             self->keyboard_cancel();
         })
     )));
+    keyboardView->inputString = System::String::_get_Empty();
     if (!levelSelectionFlowCoordinator) {
         getLogger().critical("Tried to display keyboard view with nullptr levelSelectionFlowCoordinator!");
         return;
@@ -56,10 +57,11 @@ void CVRE::Manager::keyboard_confirm(Il2CppString* input) {
     levelSelectionFlowCoordinator->DismissViewController(keyboardView, nullptr, true);
     // TODO: Upload score here
     // Score upload success should destroy CVRE::Manager
+    auto inputStr = to_utf8(csstrtostr(input));
     getLogger().debug("Attempting to upload score!");
     if (validModifiers) {
         bool outBool = false;
-        auto tmp = WebRequestor::SubmitScore(outBool, this, wrappedResults, to_utf8(csstrtostr(input)), gameplayCoreSceneSetupData);
+        auto tmp = WebRequestor::SubmitScore(outBool, this, wrappedResults, inputStr, gameplayCoreSceneSetupData);
         if (notificationBox) {
             notificationBox->DisplayNotification(tmp);
         }

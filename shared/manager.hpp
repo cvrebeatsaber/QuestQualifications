@@ -4,7 +4,7 @@
 #include "GlobalNamespace/LevelCompletionResults.hpp"
 #include "custom-types/shared/macros.hpp"
 #include "UnityEngine/MonoBehaviour.hpp"
-#include "questui/shared/CustomTypes/Components/ViewControllers/KeyboardViewController.hpp"
+#include "questui/shared/CustomTypes/Components/KeyboardController.hpp"
 #include "HMUI/FlowCoordinator.hpp"
 #include "GlobalNamespace/GameplayCoreSceneSetupData.hpp"
 #include "waitCoro.hpp"
@@ -17,7 +17,7 @@ void levelFinish(GlobalNamespace::ResultsViewController* rvc, GlobalNamespace::L
 DECLARE_CLASS_CODEGEN(CVRE, Manager, UnityEngine::MonoBehaviour, 
     DECLARE_INSTANCE_FIELD(GlobalNamespace::LevelCompletionResults*, wrappedResults);
     DECLARE_INSTANCE_FIELD(GlobalNamespace::GameplayCoreSceneSetupData*, gameplayCoreSceneSetupData);
-    DECLARE_INSTANCE_FIELD(QuestUI::KeyboardViewController*, keyboardView);
+    DECLARE_INSTANCE_FIELD(QuestUI::KeyboardController*, keyboardView);
     DECLARE_INSTANCE_FIELD(HMUI::FlowCoordinator*, levelSelectionFlowCoordinator);
     DECLARE_INSTANCE_FIELD(CVRE::Notification*, notificationBox);
     DECLARE_INSTANCE_FIELD(bool, validModifiers);

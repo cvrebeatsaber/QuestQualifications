@@ -14,6 +14,9 @@ std::string WebRequestor::SubmitScore(bool& outBool, CVRE::Manager* instance, Gl
     getLogger().debug("Uploading score for: %s", pin.data());
     SubmissionPacket packet(results, pin, map);
     packet.Serialize();
+    if (instance->notificationBox) {
+        instance->notificationBox->DisplayNotification("Hash: " + packet.Hash());
+    }
     std::string resp;
     auto responseCode = WebUtil::Post(url, packet.ToJson(), resp);
     if (responseCode == 200) {
