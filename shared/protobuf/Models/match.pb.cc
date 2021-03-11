@@ -14,35 +14,30 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fcharacteristic_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Characteristic_protobuf_2fModels_2fcharacteristic_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fcoordinator_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Coordinator_protobuf_2fModels_2fcoordinator_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fplayer_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_Player_protobuf_2fModels_2fplayer_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fpreview_5fbeatmap_5flevel_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_PreviewBeatmapLevel_protobuf_2fModels_2fpreview_5fbeatmap_5flevel_2eproto;
+
+PROTOBUF_PRAGMA_INIT_SEG
 namespace TournamentAssistantShared {
 namespace Models {
-class MatchDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Match> _instance;
-} _Match_default_instance_;
+constexpr Match::Match(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : players_()
+  , guid_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , selected_level_(nullptr)
+  , selected_characteristic_(nullptr)
+  , selected_difficulty_(0)
+
+  , _oneof_case_{}{}
+struct MatchDefaultTypeInternal {
+  constexpr MatchDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~MatchDefaultTypeInternal() {}
+  union {
+    Match _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT MatchDefaultTypeInternal _Match_default_instance_;
 }  // namespace Models
 }  // namespace TournamentAssistantShared
-static void InitDefaultsscc_info_Match_protobuf_2fModels_2fmatch_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::TournamentAssistantShared::Models::_Match_default_instance_;
-    new (ptr) ::TournamentAssistantShared::Models::Match();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_Match_protobuf_2fModels_2fmatch_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 4, 0, InitDefaultsscc_info_Match_protobuf_2fModels_2fmatch_2eproto}, {
-      &scc_info_Player_protobuf_2fModels_2fplayer_2eproto.base,
-      &scc_info_Coordinator_protobuf_2fModels_2fcoordinator_2eproto.base,
-      &scc_info_PreviewBeatmapLevel_protobuf_2fModels_2fpreview_5fbeatmap_5flevel_2eproto.base,
-      &scc_info_Characteristic_protobuf_2fModels_2fcharacteristic_2eproto.base,}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protobuf_2fModels_2fmatch_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_protobuf_2fModels_2fmatch_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protobuf_2fModels_2fmatch_2eproto = nullptr;
@@ -99,19 +94,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_protobuf_2fModels_2fplayer_2eproto,
   &::descriptor_table_protobuf_2fModels_2fpreview_5fbeatmap_5flevel_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_protobuf_2fModels_2fmatch_2eproto_sccs[1] = {
-  &scc_info_Match_protobuf_2fModels_2fmatch_2eproto.base,
-};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protobuf_2fModels_2fmatch_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protobuf_2fModels_2fmatch_2eproto = {
-  false, false, descriptor_table_protodef_protobuf_2fModels_2fmatch_2eproto, "protobuf/Models/match.proto", 765,
-  &descriptor_table_protobuf_2fModels_2fmatch_2eproto_once, descriptor_table_protobuf_2fModels_2fmatch_2eproto_sccs, descriptor_table_protobuf_2fModels_2fmatch_2eproto_deps, 1, 5,
+  false, false, 765, descriptor_table_protodef_protobuf_2fModels_2fmatch_2eproto, "protobuf/Models/match.proto", 
+  &descriptor_table_protobuf_2fModels_2fmatch_2eproto_once, descriptor_table_protobuf_2fModels_2fmatch_2eproto_deps, 5, 1,
   schemas, file_default_instances, TableStruct_protobuf_2fModels_2fmatch_2eproto::offsets,
-  file_level_metadata_protobuf_2fModels_2fmatch_2eproto, 1, file_level_enum_descriptors_protobuf_2fModels_2fmatch_2eproto, file_level_service_descriptors_protobuf_2fModels_2fmatch_2eproto,
+  file_level_metadata_protobuf_2fModels_2fmatch_2eproto, file_level_enum_descriptors_protobuf_2fModels_2fmatch_2eproto, file_level_service_descriptors_protobuf_2fModels_2fmatch_2eproto,
 };
+PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
+descriptor_table_protobuf_2fModels_2fmatch_2eproto_metadata_getter(int index) {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_protobuf_2fModels_2fmatch_2eproto);
+  return descriptor_table_protobuf_2fModels_2fmatch_2eproto.file_level_metadata[index];
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_protobuf_2fModels_2fmatch_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_protobuf_2fModels_2fmatch_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_protobuf_2fModels_2fmatch_2eproto(&descriptor_table_protobuf_2fModels_2fmatch_2eproto);
 namespace TournamentAssistantShared {
 namespace Models {
 
@@ -247,13 +244,12 @@ Match::Match(const Match& from)
 }
 
 void Match::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Match_protobuf_2fModels_2fmatch_2eproto.base);
-  guid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-      reinterpret_cast<char*>(&selected_level_) - reinterpret_cast<char*>(this)),
-      0, static_cast<size_t>(reinterpret_cast<char*>(&selected_difficulty_) -
-      reinterpret_cast<char*>(&selected_level_)) + sizeof(selected_difficulty_));
-  clear_has_leader();
+guid_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&selected_level_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&selected_difficulty_) -
+    reinterpret_cast<char*>(&selected_level_)) + sizeof(selected_difficulty_));
+clear_has_leader();
 }
 
 Match::~Match() {
@@ -281,11 +277,6 @@ void Match::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void Match::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Match& Match::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Match_protobuf_2fModels_2fmatch_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void Match::clear_leader() {
 // @@protoc_insertion_point(one_of_clear_start:TournamentAssistantShared.Models.Match)

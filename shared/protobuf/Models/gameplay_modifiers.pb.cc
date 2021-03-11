@@ -14,27 +14,25 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
+
+PROTOBUF_PRAGMA_INIT_SEG
 namespace TournamentAssistantShared {
 namespace Models {
-class GameplayModifiersDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<GameplayModifiers> _instance;
-} _GameplayModifiers_default_instance_;
+constexpr GameplayModifiers::GameplayModifiers(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : options_(0)
+{}
+struct GameplayModifiersDefaultTypeInternal {
+  constexpr GameplayModifiersDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~GameplayModifiersDefaultTypeInternal() {}
+  union {
+    GameplayModifiers _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GameplayModifiersDefaultTypeInternal _GameplayModifiers_default_instance_;
 }  // namespace Models
 }  // namespace TournamentAssistantShared
-static void InitDefaultsscc_info_GameplayModifiers_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::TournamentAssistantShared::Models::_GameplayModifiers_default_instance_;
-    new (ptr) ::TournamentAssistantShared::Models::GameplayModifiers();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_GameplayModifiers_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_GameplayModifiers_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto}, {}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto[1];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto = nullptr;
@@ -57,34 +55,36 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 
 const char descriptor_table_protodef_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n(protobuf/Models/gameplay_modifiers.pro"
-  "to\022 TournamentAssistantShared.Models\"\375\002\n"
+  "to\022 TournamentAssistantShared.Models\"\302\003\n"
   "\021GameplayModifiers\022P\n\007options\030\001 \001(\0162\?.To"
   "urnamentAssistantShared.Models.GameplayM"
-  "odifiers.GameOptions\"\225\002\n\013GameOptions\022\010\n\004"
+  "odifiers.GameOptions\"\332\002\n\013GameOptions\022\010\n\004"
   "None\020\000\022\n\n\006NoFail\020\001\022\013\n\007NoBombs\020\002\022\014\n\010NoArr"
   "ows\020\004\022\017\n\013NoObstacles\020\010\022\014\n\010SlowSong\020\020\022\r\n\t"
   "InstaFail\020 \022\017\n\013FailOnClash\020@\022\022\n\rBatteryE"
   "nergy\020\200\001\022\016\n\tFastNotes\020\200\002\022\r\n\010FastSong\020\200\004\022"
   "\027\n\022DisappearingArrows\020\200\010\022\017\n\nGhostNotes\020\200"
   "\020\022\017\n\nDemoNoFail\020\200 \022\024\n\017DemoNoObstacles\020\200@"
-  "\022\022\n\014StrictAngles\020\200\200\001B#\252\002 TournamentAssis"
-  "tantShared.Modelsb\006proto3"
+  "\022\022\n\014StrictAngles\020\200\200\001\022\r\n\007ProMode\020\200\200\002\022\r\n\007Z"
+  "enMode\020\200\200\004\022\020\n\nSmallCubes\020\200\200\010\022\023\n\rSuperFas"
+  "tSong\020\200\200\020B#\252\002 TournamentAssistantShared."
+  "Modelsb\006proto3"
   ;
-static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto_deps[1] = {
-};
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto_sccs[1] = {
-  &scc_info_GameplayModifiers_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto.base,
-};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto = {
-  false, false, descriptor_table_protodef_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto, "protobuf/Models/gameplay_modifiers.proto", 505,
-  &descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto_once, descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto_sccs, descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto_deps, 1, 0,
+  false, false, 574, descriptor_table_protodef_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto, "protobuf/Models/gameplay_modifiers.proto", 
+  &descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto_once, nullptr, 0, 1,
   schemas, file_default_instances, TableStruct_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto::offsets,
-  file_level_metadata_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto, 1, file_level_enum_descriptors_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto, file_level_service_descriptors_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto,
+  file_level_metadata_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto, file_level_enum_descriptors_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto, file_level_service_descriptors_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto,
 };
+PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
+descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto_metadata_getter(int index) {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto);
+  return descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto.file_level_metadata[index];
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto(&descriptor_table_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto);
 namespace TournamentAssistantShared {
 namespace Models {
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* GameplayModifiers_GameOptions_descriptor() {
@@ -109,6 +109,10 @@ bool GameplayModifiers_GameOptions_IsValid(int value) {
     case 4096:
     case 8192:
     case 16384:
+    case 32768:
+    case 65536:
+    case 131072:
+    case 262144:
       return true;
     default:
       return false;
@@ -132,6 +136,10 @@ constexpr GameplayModifiers_GameOptions GameplayModifiers::GhostNotes;
 constexpr GameplayModifiers_GameOptions GameplayModifiers::DemoNoFail;
 constexpr GameplayModifiers_GameOptions GameplayModifiers::DemoNoObstacles;
 constexpr GameplayModifiers_GameOptions GameplayModifiers::StrictAngles;
+constexpr GameplayModifiers_GameOptions GameplayModifiers::ProMode;
+constexpr GameplayModifiers_GameOptions GameplayModifiers::ZenMode;
+constexpr GameplayModifiers_GameOptions GameplayModifiers::SmallCubes;
+constexpr GameplayModifiers_GameOptions GameplayModifiers::SuperFastSong;
 constexpr GameplayModifiers_GameOptions GameplayModifiers::GameOptions_MIN;
 constexpr GameplayModifiers_GameOptions GameplayModifiers::GameOptions_MAX;
 constexpr int GameplayModifiers::GameOptions_ARRAYSIZE;
@@ -157,7 +165,7 @@ GameplayModifiers::GameplayModifiers(const GameplayModifiers& from)
 }
 
 void GameplayModifiers::SharedCtor() {
-  options_ = 0;
+options_ = 0;
 }
 
 GameplayModifiers::~GameplayModifiers() {
@@ -179,11 +187,6 @@ void GameplayModifiers::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void GameplayModifiers::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const GameplayModifiers& GameplayModifiers::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_GameplayModifiers_protobuf_2fModels_2fgameplay_5fmodifiers_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void GameplayModifiers::Clear() {
 // @@protoc_insertion_point(message_clear_start:TournamentAssistantShared.Models.GameplayModifiers)

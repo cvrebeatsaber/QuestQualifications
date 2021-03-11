@@ -14,39 +14,29 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fcoordinator_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Coordinator_protobuf_2fModels_2fcoordinator_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fcore_5fserver_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_CoreServer_protobuf_2fModels_2fcore_5fserver_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fmatch_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<4> scc_info_Match_protobuf_2fModels_2fmatch_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fplayer_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_Player_protobuf_2fModels_2fplayer_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fqualifier_5fevent_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_QualifierEvent_protobuf_2fModels_2fqualifier_5fevent_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fserver_5fsettings_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_ServerSettings_protobuf_2fModels_2fserver_5fsettings_2eproto;
+
+PROTOBUF_PRAGMA_INIT_SEG
 namespace TournamentAssistantShared {
 namespace Models {
-class StateDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<State> _instance;
-} _State_default_instance_;
+constexpr State::State(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : players_()
+  , coordinators_()
+  , matches_()
+  , events_()
+  , known_hosts_()
+  , server_settings_(nullptr){}
+struct StateDefaultTypeInternal {
+  constexpr StateDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StateDefaultTypeInternal() {}
+  union {
+    State _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StateDefaultTypeInternal _State_default_instance_;
 }  // namespace Models
 }  // namespace TournamentAssistantShared
-static void InitDefaultsscc_info_State_protobuf_2fModels_2fstate_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::TournamentAssistantShared::Models::_State_default_instance_;
-    new (ptr) ::TournamentAssistantShared::Models::State();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<6> scc_info_State_protobuf_2fModels_2fstate_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 6, 0, InitDefaultsscc_info_State_protobuf_2fModels_2fstate_2eproto}, {
-      &scc_info_ServerSettings_protobuf_2fModels_2fserver_5fsettings_2eproto.base,
-      &scc_info_Player_protobuf_2fModels_2fplayer_2eproto.base,
-      &scc_info_Coordinator_protobuf_2fModels_2fcoordinator_2eproto.base,
-      &scc_info_Match_protobuf_2fModels_2fmatch_2eproto.base,
-      &scc_info_QualifierEvent_protobuf_2fModels_2fqualifier_5fevent_2eproto.base,
-      &scc_info_CoreServer_protobuf_2fModels_2fcore_5fserver_2eproto.base,}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protobuf_2fModels_2fstate_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_protobuf_2fModels_2fstate_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protobuf_2fModels_2fstate_2eproto = nullptr;
@@ -100,19 +90,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_protobuf_2fModels_2fqualifier_5fevent_2eproto,
   &::descriptor_table_protobuf_2fModels_2fserver_5fsettings_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_protobuf_2fModels_2fstate_2eproto_sccs[1] = {
-  &scc_info_State_protobuf_2fModels_2fstate_2eproto.base,
-};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protobuf_2fModels_2fstate_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protobuf_2fModels_2fstate_2eproto = {
-  false, false, descriptor_table_protodef_protobuf_2fModels_2fstate_2eproto, "protobuf/Models/state.proto", 719,
-  &descriptor_table_protobuf_2fModels_2fstate_2eproto_once, descriptor_table_protobuf_2fModels_2fstate_2eproto_sccs, descriptor_table_protobuf_2fModels_2fstate_2eproto_deps, 1, 6,
+  false, false, 719, descriptor_table_protodef_protobuf_2fModels_2fstate_2eproto, "protobuf/Models/state.proto", 
+  &descriptor_table_protobuf_2fModels_2fstate_2eproto_once, descriptor_table_protobuf_2fModels_2fstate_2eproto_deps, 6, 1,
   schemas, file_default_instances, TableStruct_protobuf_2fModels_2fstate_2eproto::offsets,
-  file_level_metadata_protobuf_2fModels_2fstate_2eproto, 1, file_level_enum_descriptors_protobuf_2fModels_2fstate_2eproto, file_level_service_descriptors_protobuf_2fModels_2fstate_2eproto,
+  file_level_metadata_protobuf_2fModels_2fstate_2eproto, file_level_enum_descriptors_protobuf_2fModels_2fstate_2eproto, file_level_service_descriptors_protobuf_2fModels_2fstate_2eproto,
 };
+PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
+descriptor_table_protobuf_2fModels_2fstate_2eproto_metadata_getter(int index) {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_protobuf_2fModels_2fstate_2eproto);
+  return descriptor_table_protobuf_2fModels_2fstate_2eproto.file_level_metadata[index];
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_protobuf_2fModels_2fstate_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_protobuf_2fModels_2fstate_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_protobuf_2fModels_2fstate_2eproto(&descriptor_table_protobuf_2fModels_2fstate_2eproto);
 namespace TournamentAssistantShared {
 namespace Models {
 
@@ -176,8 +168,7 @@ State::State(const State& from)
 }
 
 void State::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_State_protobuf_2fModels_2fstate_2eproto.base);
-  server_settings_ = nullptr;
+server_settings_ = nullptr;
 }
 
 State::~State() {
@@ -200,11 +191,6 @@ void State::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void State::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const State& State::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_State_protobuf_2fModels_2fstate_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void State::Clear() {
 // @@protoc_insertion_point(message_clear_start:TournamentAssistantShared.Models.State)

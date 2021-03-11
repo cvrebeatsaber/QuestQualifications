@@ -14,29 +14,28 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fcharacteristic_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Characteristic_protobuf_2fModels_2fcharacteristic_2eproto;
+
+PROTOBUF_PRAGMA_INIT_SEG
 namespace TournamentAssistantShared {
 namespace Models {
-class BeatmapDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Beatmap> _instance;
-} _Beatmap_default_instance_;
+constexpr Beatmap::Beatmap(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , level_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , characteristic_(nullptr)
+  , difficulty_(0)
+{}
+struct BeatmapDefaultTypeInternal {
+  constexpr BeatmapDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~BeatmapDefaultTypeInternal() {}
+  union {
+    Beatmap _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT BeatmapDefaultTypeInternal _Beatmap_default_instance_;
 }  // namespace Models
 }  // namespace TournamentAssistantShared
-static void InitDefaultsscc_info_Beatmap_protobuf_2fModels_2fbeatmap_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::TournamentAssistantShared::Models::_Beatmap_default_instance_;
-    new (ptr) ::TournamentAssistantShared::Models::Beatmap();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Beatmap_protobuf_2fModels_2fbeatmap_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Beatmap_protobuf_2fModels_2fbeatmap_2eproto}, {
-      &scc_info_Characteristic_protobuf_2fModels_2fcharacteristic_2eproto.base,}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protobuf_2fModels_2fbeatmap_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_protobuf_2fModels_2fbeatmap_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protobuf_2fModels_2fbeatmap_2eproto = nullptr;
@@ -76,19 +75,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_protobuf_2fModels_2fbeatmap_5fdifficulty_2eproto,
   &::descriptor_table_protobuf_2fModels_2fcharacteristic_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_protobuf_2fModels_2fbeatmap_2eproto_sccs[1] = {
-  &scc_info_Beatmap_protobuf_2fModels_2fbeatmap_2eproto.base,
-};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protobuf_2fModels_2fbeatmap_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protobuf_2fModels_2fbeatmap_2eproto = {
-  false, false, descriptor_table_protodef_protobuf_2fModels_2fbeatmap_2eproto, "protobuf/Models/beatmap.proto", 381,
-  &descriptor_table_protobuf_2fModels_2fbeatmap_2eproto_once, descriptor_table_protobuf_2fModels_2fbeatmap_2eproto_sccs, descriptor_table_protobuf_2fModels_2fbeatmap_2eproto_deps, 1, 2,
+  false, false, 381, descriptor_table_protodef_protobuf_2fModels_2fbeatmap_2eproto, "protobuf/Models/beatmap.proto", 
+  &descriptor_table_protobuf_2fModels_2fbeatmap_2eproto_once, descriptor_table_protobuf_2fModels_2fbeatmap_2eproto_deps, 2, 1,
   schemas, file_default_instances, TableStruct_protobuf_2fModels_2fbeatmap_2eproto::offsets,
-  file_level_metadata_protobuf_2fModels_2fbeatmap_2eproto, 1, file_level_enum_descriptors_protobuf_2fModels_2fbeatmap_2eproto, file_level_service_descriptors_protobuf_2fModels_2fbeatmap_2eproto,
+  file_level_metadata_protobuf_2fModels_2fbeatmap_2eproto, file_level_enum_descriptors_protobuf_2fModels_2fbeatmap_2eproto, file_level_service_descriptors_protobuf_2fModels_2fbeatmap_2eproto,
 };
+PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
+descriptor_table_protobuf_2fModels_2fbeatmap_2eproto_metadata_getter(int index) {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_protobuf_2fModels_2fbeatmap_2eproto);
+  return descriptor_table_protobuf_2fModels_2fbeatmap_2eproto.file_level_metadata[index];
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_protobuf_2fModels_2fbeatmap_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_protobuf_2fModels_2fbeatmap_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_protobuf_2fModels_2fbeatmap_2eproto(&descriptor_table_protobuf_2fModels_2fbeatmap_2eproto);
 namespace TournamentAssistantShared {
 namespace Models {
 
@@ -138,13 +139,12 @@ Beatmap::Beatmap(const Beatmap& from)
 }
 
 void Beatmap::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Beatmap_protobuf_2fModels_2fbeatmap_2eproto.base);
-  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  level_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-      reinterpret_cast<char*>(&characteristic_) - reinterpret_cast<char*>(this)),
-      0, static_cast<size_t>(reinterpret_cast<char*>(&difficulty_) -
-      reinterpret_cast<char*>(&characteristic_)) + sizeof(difficulty_));
+name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+level_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&characteristic_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&difficulty_) -
+    reinterpret_cast<char*>(&characteristic_)) + sizeof(difficulty_));
 }
 
 Beatmap::~Beatmap() {
@@ -169,11 +169,6 @@ void Beatmap::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void Beatmap::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Beatmap& Beatmap::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Beatmap_protobuf_2fModels_2fbeatmap_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void Beatmap::Clear() {
 // @@protoc_insertion_point(message_clear_start:TournamentAssistantShared.Models.Beatmap)

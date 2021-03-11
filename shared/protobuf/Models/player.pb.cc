@@ -14,50 +14,53 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 #include <google/protobuf/port_def.inc>
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fPackets_2fsong_5flist_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_SongList_protobuf_2fModels_2fPackets_2fsong_5flist_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fplayer_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Player_Point_protobuf_2fModels_2fplayer_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_protobuf_2fModels_2fteam_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Team_protobuf_2fModels_2fteam_2eproto;
+
+PROTOBUF_PRAGMA_INIT_SEG
 namespace TournamentAssistantShared {
 namespace Models {
-class Player_PointDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Player_Point> _instance;
-} _Player_Point_default_instance_;
-class PlayerDefaultTypeInternal {
- public:
-  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Player> _instance;
-} _Player_default_instance_;
+constexpr Player_Point::Player_Point(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : x_(0)
+  , y_(0){}
+struct Player_PointDefaultTypeInternal {
+  constexpr Player_PointDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~Player_PointDefaultTypeInternal() {}
+  union {
+    Player_Point _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT Player_PointDefaultTypeInternal _Player_Point_default_instance_;
+constexpr Player::Player(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : mod_list_()
+  , id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , user_id_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , team_(nullptr)
+  , song_list_(nullptr)
+  , stream_screen_coordinates_(nullptr)
+  , play_state_(0)
+
+  , download_state_(0)
+
+  , score_(0)
+  , combo_(0)
+  , accuracy_(0)
+  , song_position_(0)
+  , stream_delay_ms_(PROTOBUF_LONGLONG(0))
+  , stream_sync_start_ms_(PROTOBUF_LONGLONG(0)){}
+struct PlayerDefaultTypeInternal {
+  constexpr PlayerDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~PlayerDefaultTypeInternal() {}
+  union {
+    Player _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PlayerDefaultTypeInternal _Player_default_instance_;
 }  // namespace Models
 }  // namespace TournamentAssistantShared
-static void InitDefaultsscc_info_Player_protobuf_2fModels_2fplayer_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::TournamentAssistantShared::Models::_Player_default_instance_;
-    new (ptr) ::TournamentAssistantShared::Models::Player();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<3> scc_info_Player_protobuf_2fModels_2fplayer_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 3, 0, InitDefaultsscc_info_Player_protobuf_2fModels_2fplayer_2eproto}, {
-      &scc_info_Team_protobuf_2fModels_2fteam_2eproto.base,
-      &scc_info_SongList_protobuf_2fModels_2fPackets_2fsong_5flist_2eproto.base,
-      &scc_info_Player_Point_protobuf_2fModels_2fplayer_2eproto.base,}};
-
-static void InitDefaultsscc_info_Player_Point_protobuf_2fModels_2fplayer_2eproto() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::TournamentAssistantShared::Models::_Player_Point_default_instance_;
-    new (ptr) ::TournamentAssistantShared::Models::Player_Point();
-    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
-  }
-}
-
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Player_Point_protobuf_2fModels_2fplayer_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Player_Point_protobuf_2fModels_2fplayer_2eproto}, {}};
-
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_protobuf_2fModels_2fplayer_2eproto[2];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_protobuf_2fModels_2fplayer_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_protobuf_2fModels_2fplayer_2eproto = nullptr;
@@ -130,20 +133,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor
   &::descriptor_table_protobuf_2fModels_2fPackets_2fsong_5flist_2eproto,
   &::descriptor_table_protobuf_2fModels_2fteam_2eproto,
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_protobuf_2fModels_2fplayer_2eproto_sccs[2] = {
-  &scc_info_Player_protobuf_2fModels_2fplayer_2eproto.base,
-  &scc_info_Player_Point_protobuf_2fModels_2fplayer_2eproto.base,
-};
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_protobuf_2fModels_2fplayer_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_protobuf_2fModels_2fplayer_2eproto = {
-  false, false, descriptor_table_protodef_protobuf_2fModels_2fplayer_2eproto, "protobuf/Models/player.proto", 888,
-  &descriptor_table_protobuf_2fModels_2fplayer_2eproto_once, descriptor_table_protobuf_2fModels_2fplayer_2eproto_sccs, descriptor_table_protobuf_2fModels_2fplayer_2eproto_deps, 2, 2,
+  false, false, 888, descriptor_table_protodef_protobuf_2fModels_2fplayer_2eproto, "protobuf/Models/player.proto", 
+  &descriptor_table_protobuf_2fModels_2fplayer_2eproto_once, descriptor_table_protobuf_2fModels_2fplayer_2eproto_deps, 2, 2,
   schemas, file_default_instances, TableStruct_protobuf_2fModels_2fplayer_2eproto::offsets,
-  file_level_metadata_protobuf_2fModels_2fplayer_2eproto, 2, file_level_enum_descriptors_protobuf_2fModels_2fplayer_2eproto, file_level_service_descriptors_protobuf_2fModels_2fplayer_2eproto,
+  file_level_metadata_protobuf_2fModels_2fplayer_2eproto, file_level_enum_descriptors_protobuf_2fModels_2fplayer_2eproto, file_level_service_descriptors_protobuf_2fModels_2fplayer_2eproto,
 };
+PROTOBUF_ATTRIBUTE_WEAK ::PROTOBUF_NAMESPACE_ID::Metadata
+descriptor_table_protobuf_2fModels_2fplayer_2eproto_metadata_getter(int index) {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_protobuf_2fModels_2fplayer_2eproto);
+  return descriptor_table_protobuf_2fModels_2fplayer_2eproto.file_level_metadata[index];
+}
 
 // Force running AddDescriptors() at dynamic initialization time.
-static bool dynamic_init_dummy_protobuf_2fModels_2fplayer_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_protobuf_2fModels_2fplayer_2eproto)), true);
+PROTOBUF_ATTRIBUTE_INIT_PRIORITY static ::PROTOBUF_NAMESPACE_ID::internal::AddDescriptorsRunner dynamic_init_dummy_protobuf_2fModels_2fplayer_2eproto(&descriptor_table_protobuf_2fModels_2fplayer_2eproto);
 namespace TournamentAssistantShared {
 namespace Models {
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Player_PlayStates_descriptor() {
@@ -215,10 +219,10 @@ Player_Point::Player_Point(const Player_Point& from)
 }
 
 void Player_Point::SharedCtor() {
-  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-      reinterpret_cast<char*>(&x_) - reinterpret_cast<char*>(this)),
-      0, static_cast<size_t>(reinterpret_cast<char*>(&y_) -
-      reinterpret_cast<char*>(&x_)) + sizeof(y_));
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&x_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&y_) -
+    reinterpret_cast<char*>(&x_)) + sizeof(y_));
 }
 
 Player_Point::~Player_Point() {
@@ -240,11 +244,6 @@ void Player_Point::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void Player_Point::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Player_Point& Player_Point::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Player_Point_protobuf_2fModels_2fplayer_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void Player_Point::Clear() {
 // @@protoc_insertion_point(message_clear_start:TournamentAssistantShared.Models.Player.Point)
@@ -503,14 +502,13 @@ Player::Player(const Player& from)
 }
 
 void Player::SharedCtor() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Player_protobuf_2fModels_2fplayer_2eproto.base);
-  id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  user_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
-      reinterpret_cast<char*>(&team_) - reinterpret_cast<char*>(this)),
-      0, static_cast<size_t>(reinterpret_cast<char*>(&stream_sync_start_ms_) -
-      reinterpret_cast<char*>(&team_)) + sizeof(stream_sync_start_ms_));
+id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+user_id_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&team_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&stream_sync_start_ms_) -
+    reinterpret_cast<char*>(&team_)) + sizeof(stream_sync_start_ms_));
 }
 
 Player::~Player() {
@@ -538,11 +536,6 @@ void Player::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 void Player::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
-const Player& Player::default_instance() {
-  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Player_protobuf_2fModels_2fplayer_2eproto.base);
-  return *internal_default_instance();
-}
-
 
 void Player::Clear() {
 // @@protoc_insertion_point(message_clear_start:TournamentAssistantShared.Models.Player)
