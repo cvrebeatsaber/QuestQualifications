@@ -1,9 +1,31 @@
 #include "util.hpp"
 #include "GlobalNamespace/BeatmapDifficulty.hpp"
+#include <fstream>
+#include "beatsaber-hook/shared/config/config-utils.hpp"
+#include "main.hpp"
 
 std::optional<std::string> Util::ReadSecret() {
     // TODO: Make this read a file
     return "A$)pt(w@#*gYHADRIPOF8N VY7B";
+}
+
+std::optional<std::string> Util::ReadUID() {
+    std::ifstream stream(getDataDir(getInfo()) + "secret.txt");
+    if (!stream.is_open()) {
+        return std::nullopt;
+    }
+    std::string uid;
+    stream >> uid;
+    return uid;
+}
+
+std::string Util::GetPacketDir() {
+    auto path = getDataDir(getInfo()) + "cvre_packets/";
+    
+    if (!direxists(path)) {
+        mkpath(path);
+    }
+    return path;
 }
 
 std::string Util::RankStr(GlobalNamespace::RankModel::Rank rank) {
@@ -39,8 +61,8 @@ std::string Util::LevelEndActionStr(GlobalNamespace::LevelCompletionResults::Lev
         return "LostConnection";
     case GlobalNamespace::LevelCompletionResults::LevelEndAction::Restart:
         return "Restart";
-    case GlobalNamespace::LevelCompletionResults::LevelEndAction::RoomDestroyed:
-        return "RoomDestroyed";
+    case GlobalNamespace::LevelCompletionResults::LevelEndAction::MultiplayerInactive:
+        return "MultiplayerInactive";
     case GlobalNamespace::LevelCompletionResults::LevelEndAction::None:
     default:
         return "None";
@@ -65,21 +87,6 @@ void Util::PopulateJsonProperties(std::unordered_map<std::string, std::string>& 
     dict.insert({"noteJumpStartBeatOffset", std::to_string(o->get_noteJumpStartBeatOffset())});
     dict.insert({"difficulty", std::to_string(o->get_difficulty())});
     dict.insert({"difficultyRank", std::to_string(o->get_difficultyRank())});
-}
-
-void Util::PopulateJsonProperties(std::unordered_map<std::string, std::string>& dict, GlobalNamespace::IBeatmapLevel* o) {
-    dict.insert({"beatsPerMinute", std::to_string(o->get_beatsPerMinute())});
-    dict.insert({"levelAuthorName", to_utf8(csstrtostr(o->get_levelAuthorName()))});
-    dict.insert({"levelID", to_utf8(csstrtostr(o->get_levelID()))});
-    dict.insert({"previewDuration", std::to_string(o->get_previewDuration())});
-    dict.insert({"previewStartTime", std::to_string(o->get_previewStartTime())});
-    dict.insert({"shuffle", std::to_string(o->get_shuffle())});
-    dict.insert({"shufflePeriod", std::to_string(o->get_shufflePeriod())});
-    dict.insert({"songAuthorName", to_utf8(csstrtostr(o->get_songAuthorName()))});
-    dict.insert({"songDuration", std::to_string(o->get_songDuration())});
-    dict.insert({"songName", to_utf8(csstrtostr(o->get_songName()))});
-    dict.insert({"songSubName", to_utf8(csstrtostr(o->get_songSubName()))});
-    dict.insert({"songTimeOffset", std::to_string(o->get_songTimeOffset())});
 }
 
 void Util::PopulateJsonProperties(std::unordered_map<std::string, std::string>& dict, GlobalNamespace::LevelCompletionResults* o) {

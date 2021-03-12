@@ -9,41 +9,44 @@
 #include "GlobalNamespace/BeatmapEnvironmentHelper.hpp"
 #include "GlobalNamespace/OverrideEnvironmentSettings.hpp"
 #include "GlobalNamespace/EnvironmentInfoSO.hpp"
+#include "GlobalNamespace/PracticeSettings.hpp"
+#include "GlobalNamespace/PlayerSpecificSettings.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "GlobalNamespace/GameplayModifiers.hpp"
 #include "HMUI/FlowCoordinator.hpp"
 #include "GlobalNamespace/RelativeScoreAndImmediateRankCounter.hpp"
 
 #include "manager.hpp"
-#include "modifiers.hpp"
 #include "waitCoro.hpp"
 #include "notification.hpp"
 #include "custom-types/shared/register.hpp"
 #include "questui/shared/QuestUI.hpp"
 #include "main.hpp"
 
+#include "beatsaber-hook/shared/config/config-utils.hpp"
+
 static ModInfo modInfo;
 CVRE::Manager* globalManager = nullptr;
-float accuracy = 0;
 
-const ModInfo& getModInfo() {
+const ModInfo& getInfo() {
     return modInfo;
 }
 
-const Logger& getLogger() {
-    static const Logger logger(modInfo, LoggerOptions(false, false));
-    return logger;
-}
-
-float getAccuracy() {
-    return accuracy;
+Logger& getLogger() {
+    static Logger* logger = new Logger(modInfo, LoggerOptions(false, true));
+    return *logger;
 }
 
 extern "C" void setup(ModInfo& info) {
     info.id = ID;
     info.version = VERSION;
     modInfo = info;
-    getLogger().info("Calling setup!");
+    // Ensure persistent data dir is made
+    auto dir = getDataDir(info);
+    if (!direxists(dir)) {
+        getLogger().debug("Making persistent data dir: %s", dir.c_str());
+        mkpath(dir);
+    }
 }
 
 void yeetGlobalManager() {
@@ -56,27 +59,29 @@ void yeetGlobalManager() {
 
 void createManager() {
     if (!globalManager) {
-        auto* go = UnityEngine::GameObject::New_ctor(il2cpp_utils::createcsstr("CVRE_Manager"));
-        RET_V_UNLESS(go);
+        static auto* str = il2cpp_utils::createcsstr("CVRE_Manager", il2cpp_utils::StringType::Manual);
+        auto* go = UnityEngine::GameObject::New_ctor(str);
+        RET_V_UNLESS(getLogger(), go);
         UnityEngine::Object::DontDestroyOnLoad(go);
-        globalManager = reinterpret_cast<CVRE::Manager*>(go->AddComponent(typeof(CVRE::Manager*)));
-        globalManager->notificationBox = reinterpret_cast<CVRE::Notification*>(go->AddComponent(typeof(CVRE::Notification*)));
+        globalManager = reinterpret_cast<CVRE::Manager*>(go->AddComponent(csTypeOf(CVRE::Manager*)));
+        globalManager->notificationBox = reinterpret_cast<CVRE::Notification*>(go->AddComponent(csTypeOf(CVRE::Notification*)));
     }
 }
 
 void levelFinish(GlobalNamespace::ResultsViewController* rvc, GlobalNamespace::LevelCompletionResults* results) {
-    RET_V_UNLESS(rvc);
-    RET_V_UNLESS(results);
-    RET_V_UNLESS(globalManager);
+    RET_V_UNLESS(getLogger(), rvc);
+    RET_V_UNLESS(getLogger(), results);
+    RET_V_UNLESS(getLogger(), globalManager);
     globalManager->wrappedResults = results;
 }
 
 MAKE_HOOK_OFFSETLESS(StandardLevelScenesTransitionSetupDataSO_Init, void, GlobalNamespace::StandardLevelScenesTransitionSetupDataSO* self,
+        Il2CppString* gameMode,
         GlobalNamespace::IDifficultyBeatmap* beatmap, GlobalNamespace::OverrideEnvironmentSettings* settings, GlobalNamespace::ColorScheme* overrideColorScheme,
         GlobalNamespace::GameplayModifiers* modifiers, GlobalNamespace::PlayerSpecificSettings* playerSettings,
         GlobalNamespace::PracticeSettings* practiceSettings, Il2CppString* backButtonText, bool useTestCutSounds) {
     
-    StandardLevelScenesTransitionSetupDataSO_Init(self, beatmap, settings, overrideColorScheme, modifiers, playerSettings, practiceSettings, backButtonText, useTestCutSounds);
+    StandardLevelScenesTransitionSetupDataSO_Init(self, gameMode, beatmap, settings, overrideColorScheme, modifiers, playerSettings, practiceSettings, backButtonText, useTestCutSounds);
     auto* env = GlobalNamespace::BeatmapEnvironmentHelper::GetEnvironmentInfo(beatmap);
     if (settings && settings->overrideEnvironments) {
         env = settings->GetOverrideEnvironmentInfoForType(env->environmentType);
@@ -96,31 +101,23 @@ MAKE_HOOK_OFFSETLESS(ResultsViewController_ContinueButtonPressed, void, GlobalNa
     globalManager->continuePressed();
 }
 
-MAKE_HOOK_OFFSETLESS(RelativeScoreAndImmediateRankCounter_UpdateRelativeScoreAndImmediateRank, void, GlobalNamespace::RelativeScoreAndImmediateRankCounter* self,
-        int score, int modifiedScore, int maxPossibleScore, int maxPossibleModifiedScore) {
-    RelativeScoreAndImmediateRankCounter_UpdateRelativeScoreAndImmediateRank(self, score, modifiedScore, maxPossibleScore, maxPossibleModifiedScore);
-    accuracy = self->relativeScore;
-}
-
 MAKE_HOOK_OFFSETLESS(SoloFreePlayFlowCoordinator_LevelSelectionFlowCoordinatorDidActivate, void, HMUI::FlowCoordinator* self, bool firstActivation, int activationType) {
     SoloFreePlayFlowCoordinator_LevelSelectionFlowCoordinatorDidActivate(self, firstActivation, activationType);
     createManager();
     globalManager->levelSelectionFlowCoordinator = self;
-    if (firstActivation) {
-        if (globalManager->notificationBox) {
-            globalManager->notificationBox->CreateNotification("Welcome to CVRE!");
-        }
+    if (globalManager->notificationBox) {
+        globalManager->notificationBox->CreateNotification("Welcome to CVRE!");
     }
 }
 
 extern "C" void load() {
     QuestUI::Init();
-    custom_types::Register::RegisterType<CVRE::Notification>();
-    custom_types::Register::RegisterType<CVRE::Manager>();
-    custom_types::Register::RegisterType<CVRE::WaitFor>();
-    Modifiers::Init();
-    INSTALL_HOOK_OFFSETLESS(StandardLevelScenesTransitionSetupDataSO_Init, il2cpp_utils::FindMethodUnsafe("", "StandardLevelScenesTransitionSetupDataSO", "Init", 8));
-    INSTALL_HOOK_OFFSETLESS(ResultsViewController_ContinueButtonPressed, il2cpp_utils::FindMethod("", "ResultsViewController", "ContinueButtonPressed"));
-    INSTALL_HOOK_OFFSETLESS(RelativeScoreAndImmediateRankCounter_UpdateRelativeScoreAndImmediateRank, il2cpp_utils::FindMethodUnsafe("", "RelativeScoreAndImmediateRankCounter", "UpdateRelativeScoreAndImmediateRank", 4));
-    INSTALL_HOOK_OFFSETLESS(SoloFreePlayFlowCoordinator_LevelSelectionFlowCoordinatorDidActivate, il2cpp_utils::FindMethodUnsafe("", "SoloFreePlayFlowCoordinator", "LevelSelectionFlowCoordinatorDidActivate", 2));
+    custom_types::Register::RegisterTypes<
+        CVRE::Notification,
+        CVRE::Manager,
+        CVRE::WaitFor
+    >();
+    INSTALL_HOOK_OFFSETLESS(getLogger(), StandardLevelScenesTransitionSetupDataSO_Init, il2cpp_utils::FindMethodUnsafe("", "StandardLevelScenesTransitionSetupDataSO", "Init", 9));
+    INSTALL_HOOK_OFFSETLESS(getLogger(), ResultsViewController_ContinueButtonPressed, il2cpp_utils::FindMethod("", "ResultsViewController", "ContinueButtonPressed"));
+    INSTALL_HOOK_OFFSETLESS(getLogger(), SoloFreePlayFlowCoordinator_LevelSelectionFlowCoordinatorDidActivate, il2cpp_utils::FindMethodUnsafe("", "SoloFreePlayFlowCoordinator", "SinglePlayerLevelSelectionFlowCoordinatorDidActivate", 2));
 }

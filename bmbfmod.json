@@ -1,46 +1,28 @@
 {
   "id": "CVREPlugin",
   "name": "CVREPlugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Sc2ad",
   "description": [
     "CVRE Qualifications mod!"
   ],
   "category": "Gameplay",
-  "gameVersion": "1.11.1",
+  "gameVersion": "1.13.2",
   "platform": "Quest",
   "components": [
     {
       "type": "HookMod",
       "installAction": {
-        "installLibraryFile": "libCVREPlugin_0_1_0.so"
+        "installLibraryFile": "libCVREPlugin.so"
       },
       "uninstallAction": {
-        "removeLibraryFile": "libCVREPlugin_0_1_0.so"
+        "removeLibraryFile": "libCVREPlugin.so"
       }
     },
     {
       "type": "HookModLibrary",
       "installAction": {
-        "installLibraryFile": "libbeatsaber-hook_0_7_1.so"
-      }
-    },
-    {
-      "type": "HookModLibrary",
-      "installAction": {
-        "installLibraryFile": "libcodegen_0_2_6.so"
-      }
-    },
-    {
-      "type": "HookModLibrary",
-      "installAction": {
-        "installLibraryFile": "libcustom_types.so"
-      }
-    },
-    {
-      "type": "HookModLibrary",
-      "installAction": {
-        "installLibraryFile": "libquestui.so"
+        "installLibraryFile": "libbeatsaber-hook_1_1_5.so"
       }
     }
   ]

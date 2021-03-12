@@ -1,3 +1,4 @@
 #pragma once
+#include "modloader/shared/modloader.hpp"
 
-float getAccuracy();
+const ModInfo& getInfo();

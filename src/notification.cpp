@@ -33,22 +33,26 @@ void CVRE::Notification::OnDestroy() {
 void CVRE::Notification::CreateNotification(std::string_view message) {
     getLogger().debug("Creating notification: %s", message.data());
     // Create notification box here.
-    auto go = UnityEngine::GameObject::New_ctor(il2cpp_utils::createcsstr("CVRENotificationObject"));
-    UnityEngine::Object::DontDestroyOnLoad(go);
-    auto transform = go->get_transform();
-    transform->set_position(UnityEngine::Vector3(0, 0, 2.5));
-    transform->set_eulerAngles(UnityEngine::Vector3(0, 0, 0));
-    transform->set_localScale(UnityEngine::Vector3(0.01, 0.01, 0.01));
+    if (notificationBox == nullptr) {
+        auto go = UnityEngine::GameObject::New_ctor(il2cpp_utils::createcsstr("CVRENotificationObject"));
+        UnityEngine::Object::DontDestroyOnLoad(go);
+        auto transform = go->get_transform();
+        transform->set_position(UnityEngine::Vector3(0, 0, 2.5));
+        transform->set_eulerAngles(UnityEngine::Vector3(0, 0, 0));
+        transform->set_localScale(UnityEngine::Vector3(0.01, 0.01, 0.01));
 
-    auto* canvas = go->AddComponent<UnityEngine::Canvas*>();
-    canvas->set_renderMode(UnityEngine::RenderMode::WorldSpace);
-    auto* rectTransform = reinterpret_cast<UnityEngine::RectTransform*>(canvas->get_transform());
-    rectTransform->set_sizeDelta(UnityEngine::Vector2(200, 50));
+        auto* canvas = go->AddComponent<UnityEngine::Canvas*>();
+        canvas->set_renderMode(UnityEngine::RenderMode::WorldSpace);
+        auto* rectTransform = reinterpret_cast<UnityEngine::RectTransform*>(canvas->get_transform());
+        rectTransform->set_sizeDelta(UnityEngine::Vector2(200, 50));
 
-    notificationBox = QuestUI::BeatSaberUI::CreateText(rectTransform, message.data(), UnityEngine::Vector2(0, -30), UnityEngine::Vector2(-39, 28));
+        notificationBox = QuestUI::BeatSaberUI::CreateText(rectTransform, message.data(), UnityEngine::Vector2(0, -30), UnityEngine::Vector2(-39, 28));
 
-    notificationBox->set_fontSize(10);
-    notificationBox->set_alignment(TMPro::TextAlignmentOptions::Center);
+        notificationBox->set_fontSize(10);
+        notificationBox->set_alignment(TMPro::TextAlignmentOptions::Center);
+    } else {
+        notificationBox->set_text(il2cpp_utils::createcsstr(message));
+    }
     validReset = true;
 }
 

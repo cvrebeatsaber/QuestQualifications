@@ -9,10 +9,11 @@
 
 namespace Util {
     std::optional<std::string> ReadSecret();
+    std::optional<std::string> ReadUID();
     std::string RankStr(GlobalNamespace::RankModel::Rank rank);
     std::string LevelEndActionStr(GlobalNamespace::LevelCompletionResults::LevelEndAction action);
     std::string LevelEndStateType(GlobalNamespace::LevelCompletionResults::LevelEndStateType type);
     void PopulateJsonProperties(std::unordered_map<std::string, std::string>& dict, GlobalNamespace::IDifficultyBeatmap* o);
-    void PopulateJsonProperties(std::unordered_map<std::string, std::string>& dict, GlobalNamespace::IBeatmapLevel* o);
     void PopulateJsonProperties(std::unordered_map<std::string, std::string>& dict, GlobalNamespace::LevelCompletionResults* o);
+    std::string GetPacketDir();
 }

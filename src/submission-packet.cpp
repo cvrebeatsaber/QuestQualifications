@@ -2,6 +2,7 @@
 #include "logging.hpp"
 #include "GlobalNamespace/IBeatmapLevel.hpp"
 #include "GlobalNamespace/IDifficultyBeatmap.hpp"
+#include "GlobalNamespace/IPreviewBeatmapLevel.hpp"
 #include "GlobalNamespace/RankModel.hpp"
 #include "GlobalNamespace/RankModel_Rank.hpp"
 #include "include/cryptopp/sha.h"
@@ -13,11 +14,7 @@
 #include "main.hpp"
 #include "util.hpp"
 
-#ifndef PRECISION
-#define PRECISION 10000
-#endif
-
-#define GAME_VERSION "1.11.1"
+#define GAME_VERSION "1.13.2"
 
 SubmissionPacket::SubmissionPacket() {
     version = GAME_VERSION;
@@ -25,20 +22,20 @@ SubmissionPacket::SubmissionPacket() {
 }
 
 SubmissionPacket::SubmissionPacket(GlobalNamespace::LevelCompletionResults* results, std::string_view pin, GlobalNamespace::GameplayCoreSceneSetupData* data) {
-    getLogger().debug("SubmissionPacket Level with name: %s", to_utf8(csstrtostr(data->difficultyBeatmap->get_level()->get_songName())).c_str());
+    auto* level = CRASH_UNLESS(il2cpp_utils::RunMethod<GlobalNamespace::IPreviewBeatmapLevel*>(data->difficultyBeatmap, "get_level"));
+    auto* levelID = CRASH_UNLESS(il2cpp_utils::RunMethod<Il2CppString*>(level, "get_levelID"));
+    auto* songName = CRASH_UNLESS(il2cpp_utils::RunMethod<Il2CppString*>(level, "get_songName"));
+    getLogger().debug("SubmissionPacket Level with name: %s", to_utf8(csstrtostr(songName)).c_str());
     getLogger().debug("SubmissionPacket with score: %u and rank: %s", results->rawScore, Util::RankStr(results->rank).c_str());
-    getLogger().debug("SubmissionPacket with acc: %f", getAccuracy());
 
     this->pin.assign(pin.data());
     // Cheat for now
     characteristic = "Standard";
     score = results->modifiedScore;
-    accuracy = roundf(getAccuracy() * PRECISION) / PRECISION;
     rank = Util::RankStr(results->rank);
     difficulty = data->difficultyBeatmap->get_difficultyRank();
     version = GAME_VERSION;
-    levelId = to_utf8(csstrtostr(data->difficultyBeatmap->get_level()->get_levelID()));
-    Util::PopulateJsonProperties(mapInfo, data->difficultyBeatmap->get_level());
+    levelId = to_utf8(csstrtostr(levelID));
     Util::PopulateJsonProperties(mapInfo, data->difficultyBeatmap);
     Util::PopulateJsonProperties(stats, results);
     hash = Hash();
@@ -120,8 +117,9 @@ std::string SubmissionPacket::ToJson() {
 
 void SubmissionPacket::Serialize() {
     auto duration = std::chrono::system_clock::now().time_since_epoch();
+    timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
     if (!direxists("/sdcard/cvre_packets/")) {
         mkpath("/sdcard/cvre_packets/");
     }
-    writefile(string_format("/sdcard/cvre_packets/packet_%u.tmp", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count()), ToJson());
+    writefile(string_format("/sdcard/cvre_packets/packet_%ul.tmp", timestamp), ToJson());
 }

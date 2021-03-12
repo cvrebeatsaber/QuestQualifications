@@ -1,6 +1,9 @@
 #include "System/Action.hpp"
 #include "System/Action_1.hpp"
 #include "GlobalNamespace/GameplayModifiers.hpp"
+#include "GlobalNamespace/IDifficultyBeatmapSet.hpp"
+#include "GlobalNamespace/BeatmapCharacteristicSO.hpp"
+#include "GlobalNamespace/PlayerSpecificSettings.hpp"
 #include "beatsaber-hook/shared/utils/utils.h"
 #include "beatsaber-hook/shared/utils/typedefs.h"
 #include "manager.hpp"
@@ -8,33 +11,74 @@
 #include "beatsaber-hook/shared/utils/il2cpp-functions.hpp"
 #include "waitCoro.hpp"
 #include "util.hpp"
-#include "modifiers.hpp"
 #include "logging.hpp"
 #include "submission-packet.hpp"
 #include "web-requestor.hpp"
+#include "packet.hpp"
+#include <fstream>
+#include <chrono>
 
 DEFINE_CLASS(CVRE::Manager);
 
-void CVRE::Manager::DisplayKeyboard() {
-    getLogger().debug("Displaying keyboard!");
-    // Stale keyboardView reference should be auto-gc'd
-    keyboardView = QuestUI::BeatSaberUI::CreateViewController<QuestUI::KeyboardController*>();
-    keyboardView->add_confirmPressed(reinterpret_cast<System::Action_1<Il2CppString*>*>(RET_V_UNLESS(
-        il2cpp_utils::MakeAction(il2cpp_functions::class_get_type(classof(System::Action_1<Il2CppString*>*)), this, +[](CVRE::Manager* self, Il2CppString* input) {
-            self->keyboard_confirm(input);
-        })
-    )));
-    keyboardView->add_cancelPressed(reinterpret_cast<System::Action*>(RET_V_UNLESS(
-        il2cpp_utils::MakeAction(il2cpp_functions::class_get_type(classof(System::Action*)), this, +[](CVRE::Manager* self) {
-            self->keyboard_cancel();
-        })
-    )));
-    keyboardView->inputString = System::String::_get_Empty();
-    if (!levelSelectionFlowCoordinator) {
-        getLogger().critical("Tried to display keyboard view with nullptr levelSelectionFlowCoordinator!");
-        return;
+inline TournamentAssistantShared::Models::Characteristic* CreateCharacteristic(GlobalNamespace::IDifficultyBeatmap* level) {
+    // Create characteristic
+    auto* characteristic = new TournamentAssistantShared::Models::Characteristic();
+    auto* parentBeatmapSet = CRASH_UNLESS(il2cpp_utils::RunMethod(level, "get_parentDifficultyBeatmapSet"));
+    auto* beatmapChar = CRASH_UNLESS(il2cpp_utils::RunMethod<GlobalNamespace::BeatmapCharacteristicSO*>(parentBeatmapSet, "get_beatmapCharacteristic"));
+
+    characteristic->set_serialized_name(to_utf8(csstrtostr(beatmapChar->get_serializedName())));
+    auto* arr = CRASH_UNLESS(il2cpp_utils::RunMethod<Array<GlobalNamespace::IDifficultyBeatmap*>*>(parentBeatmapSet, "get_difficultyBeatmaps"));
+
+    for (int i = 0; i < arr->Length(); i++) {
+        auto innerDiffRank = CRASH_UNLESS(il2cpp_utils::RunMethod<int>(arr->values[i], "get_difficultyRank"));
+        characteristic->add_difficulties((TournamentAssistantShared::Models::BeatmapDifficulty)innerDiffRank);
     }
-    levelSelectionFlowCoordinator->PresentViewController(keyboardView, nullptr, false);
+    return characteristic;
+}
+
+inline TournamentAssistantShared::Models::GameplayModifiers* CreateModifiers(GlobalNamespace::GameplayModifiers* params) {
+    // Create gameplay modifiers
+    auto* modifiers = new TournamentAssistantShared::Models::GameplayModifiers();
+    int val = 0;
+    val |= params->get_noFailOn0Energy() ? 1 : 0;
+    val |= params->get_noBombs() ? 2 : 0;
+    val |= params->get_noArrows() ? 4 : 0;
+    val |= params->get_enabledObstacleType() == GlobalNamespace::GameplayModifiers::EnabledObstacleType::NoObstacles ? 8 : 0;
+    val |= params->get_songSpeed() == GlobalNamespace::GameplayModifiers::SongSpeed::Slower ? 16 : 0;
+    val |= params->get_instaFail() ? 32 : 0;
+    val |= params->get_failOnSaberClash() ? 64 : 0;
+    val |= params->get_energyType() == GlobalNamespace::GameplayModifiers::EnergyType::Battery ? 128 : 0;
+    val |= params->get_fastNotes() ? 256 : 0;
+    val |= params->get_songSpeed() == GlobalNamespace::GameplayModifiers::SongSpeed::Faster ? 512 : 0;
+    val |= params->get_disappearingArrows() ? 1024 : 0;
+    val |= params->get_ghostNotes() ? 2048 : 0;
+    val |= params->get_demoNoFail() ? 4096 : 0;
+    val |= params->get_demoNoObstacles() ? 8192 : 0;
+    val |= params->get_strictAngles() ? 16384 : 0;
+    modifiers->set_options((TournamentAssistantShared::Models::GameplayModifiers_GameOptions)val);
+    return modifiers;
+}
+
+inline TournamentAssistantShared::Models::PlayerSpecificSettings* CreatePlayerSettings(GlobalNamespace::PlayerSpecificSettings* settings) {
+    // Create player settings
+    auto* outp = new TournamentAssistantShared::Models::PlayerSpecificSettings();
+    outp->set_note_jump_start_beat_offset(settings->get_noteJumpStartBeatOffset());
+    outp->set_player_height(settings->get_playerHeight());
+    outp->set_saber_trail_intensity(settings->get_saberTrailIntensity());
+    outp->set_sfx_volume(settings->get_sfxVolume());
+    int val = 0;
+    val |= settings->get_leftHanded() ? 1 : 0;
+    val |= settings->get_staticLights() ? 2 : 0;
+    val |= settings->get_noTextsAndHuds() ? 4 : 0;
+    val |= settings->get_advancedHud() ? 8 : 0;
+    val |= settings->get_reduceDebris() ? 16 : 0;
+    val |= settings->get_automaticPlayerHeight() ? 32 : 0;
+    val |= settings->get_noFailEffects() ? 64 : 0;
+    val |= settings->get_autoRestart() ? 128 : 0;
+    val |= settings->get_hideNoteSpawnEffect() ? 256 : 0;
+    val |= settings->get_adaptiveSfx() ? 512 : 0;
+    outp->set_options((TournamentAssistantShared::Models::PlayerSpecificSettings_PlayerOptions)val);
+    return outp;
 }
 
 void CVRE::Manager::submitScore() {
@@ -50,46 +94,62 @@ void CVRE::Manager::submitScore() {
         return;
     }
     // TODO: Ensure ResultsViewController exists here
-    DisplayKeyboard();
-}
+    
+    // TODO: SUBMIT PACKET TO SPECIFIC EVENT ID HERE
+    auto* subScore = new TournamentAssistantShared::Models::Packets::SubmitScore();
+    auto* scoreM = new TournamentAssistantShared::Models::Score();
+    scoreM->set_score(wrappedResults->modifiedScore);
+    scoreM->set_color("#ffffff");
+    scoreM->set_full_combo(wrappedResults->fullCombo);
+    // CVRE: b69ce5f6-f5f2-4865-aa8d-f50a9dfa9b6f
+    // TEST: f86bff90-9cf7-460d-a2ef-87b1b1c5db44
+    scoreM->set_event_id("b69ce5f6-f5f2-4865-aa8d-f50a9dfa9b6f");
+    auto* params = new TournamentAssistantShared::Models::GameplayParameters();
+    // Create beatmap
+    auto* beatmap = new TournamentAssistantShared::Models::Beatmap();
+    auto* difficultyBeatmap = gameplayCoreSceneSetupData->difficultyBeatmap;
+    auto* level = CRASH_UNLESS(il2cpp_utils::RunMethod<GlobalNamespace::IPreviewBeatmapLevel*>(difficultyBeatmap, "get_level"));
+    auto* id = CRASH_UNLESS(il2cpp_utils::RunMethod<Il2CppString*>(level, "get_levelID"));
+    auto* name = CRASH_UNLESS(il2cpp_utils::RunMethod<Il2CppString*>(level, "get_songName"));
+    beatmap->set_name(to_utf8(csstrtostr(name)));
+    beatmap->set_level_id(to_utf8(csstrtostr(id)));
+    auto diffRank = CRASH_UNLESS(il2cpp_utils::RunMethod<int>(difficultyBeatmap, "get_difficultyRank"));
+    beatmap->set_difficulty((TournamentAssistantShared::Models::BeatmapDifficulty)diffRank);
+    
+    auto* characteristic = CreateCharacteristic(difficultyBeatmap);
+    beatmap->set_allocated_characteristic(characteristic);
+    params->set_allocated_beatmap(beatmap);
 
-void CVRE::Manager::keyboard_confirm(Il2CppString* input) {
-    levelSelectionFlowCoordinator->DismissViewController(keyboardView, nullptr, true);
-    // TODO: Upload score here
-    // Score upload success should destroy CVRE::Manager
-    auto inputStr = to_utf8(csstrtostr(input));
-    getLogger().debug("Attempting to upload score!");
-    if (validModifiers) {
-        bool outBool = false;
-        auto tmp = WebRequestor::SubmitScore(outBool, this, wrappedResults, inputStr, gameplayCoreSceneSetupData);
+    auto* modifiers = CreateModifiers(wrappedResults->gameplayModifiers);
+    params->set_allocated_gameplay_modifiers(modifiers);
+
+    auto* playerSettings = CreatePlayerSettings(gameplayCoreSceneSetupData->playerSpecificSettings);
+    params->set_allocated_player_settings(playerSettings);
+    scoreM->set_allocated_parameters(params);
+    // Read user ID, cache and place here
+    auto userId = Util::ReadUID();
+    if (!userId) {
         if (notificationBox) {
-            notificationBox->DisplayNotification(tmp);
+            notificationBox->DisplayNotification("Missing user ID file! Download it from BeatKhana and try again!");
         }
-        if (outBool) {
-            // Destroy the keyboard view if we succeed!
-            UnityEngine::Object::Destroy(keyboardView);
-        }
-    } else {
-        getLogger().warning("Modifiers are not valid!");
+        getLogger().critical("Could not read user ID!");
     }
-}
+    scoreM->set_user_id(*userId);
+    // Either read username from C# call, or just arbitrarily determine.
+    scoreM->set_username(*userId);
+    subScore->set_allocated_score(scoreM);
+    TournamentAssistantShared::Models::Packet pkt(TournamentAssistantShared::Models::PacketType::SubmitScore, subScore);
 
-void CVRE::Manager::keyboard_cancel() {
-    getLogger().debug("Cancelled submission!");
-    if (notificationBox) {
-        notificationBox->DisplayNotification("Cancelled submission!");
+    auto pktDir = Util::GetPacketDir();
+    auto path = string_format(pktDir + "packet_%s_%u_%s_%u.dat", to_utf8(csstrtostr(name)).c_str(), wrappedResults->modifiedScore, userId->c_str(), packet.timestamp);
+    std::ofstream outputStream(path.c_str(), std::ios::binary);
+    if (!outputStream.is_open()) {
+        getLogger().error("Could not open output stream! location: %s", path.c_str());
+    } else {
+        pkt.ToBytes(outputStream);
+        outputStream.close();
+        getLogger().debug("Wrote packet to file: %s", path.c_str());
     }
-    levelSelectionFlowCoordinator->DismissViewController(keyboardView, nullptr, true);
-    keyboardView->set_enabled(false);
-    // Create wait coro
-    auto* go = UnityEngine::GameObject::New_ctor();
-    auto* instance = reinterpret_cast<CVRE::WaitFor*>(go->AddComponent(typeof(CVRE::WaitFor*)));
-    instance->maxCount = 100;
-    instance->callback = reinterpret_cast<System::Action_1<System::Object*>*>(RET_V_UNLESS(
-        il2cpp_utils::MakeAction(il2cpp_functions::class_get_type(classof(System::Action_1<System::Object*>*)), this, +[](CVRE::Manager* self, System::Object* instance) {
-            self->toDestroy(reinterpret_cast<CVRE::WaitFor*>(instance));
-        })
-    ));
 }
 
 void CVRE::Manager::toDestroy(CVRE::WaitFor* instance) {
@@ -97,7 +157,6 @@ void CVRE::Manager::toDestroy(CVRE::WaitFor* instance) {
     UnityEngine::Object::Destroy(instance->get_gameObject());
     UnityEngine::Object::Destroy(instance);
     // We should also destroy CVRE::Manager here
-    UnityEngine::Object::Destroy(keyboardView);
 }
 
 void CVRE::Manager::invalidPinWaitOver(CVRE::WaitFor* instance) {
@@ -114,9 +173,9 @@ void CVRE::Manager::invalidPin() {
     }
     // Create wait coro
     auto* go = UnityEngine::GameObject::New_ctor();
-    auto* instance = reinterpret_cast<CVRE::WaitFor*>(go->AddComponent(typeof(CVRE::WaitFor*)));
-    instance->callback = reinterpret_cast<System::Action_1<System::Object*>*>(RET_V_UNLESS(
-        il2cpp_utils::MakeAction(il2cpp_functions::class_get_type(classof(System::Action_1<System::Object*>*)), this, +[](CVRE::Manager* self, System::Object* instance) {
+    auto* instance = reinterpret_cast<CVRE::WaitFor*>(go->AddComponent(csTypeOf(CVRE::WaitFor*)));
+    instance->callback = reinterpret_cast<System::Action_1<System::Object*>*>(RET_V_UNLESS(getLogger(), 
+        il2cpp_utils::MakeDelegate(il2cpp_functions::class_get_type(classof(System::Action_1<System::Object*>*)), this, +[](CVRE::Manager* self, System::Object* instance) {
             self->invalidPinWaitOver(reinterpret_cast<CVRE::WaitFor*>(instance));
         })
     ));
@@ -140,66 +199,24 @@ void CVRE::Manager::continuePressed() {
 
 bool CVRE::Manager::checkModifiers() {
     getLogger().debug("Checking modifiers!");
-    auto& competitionModifiers = Modifiers::get_competitionModifiers();
-    if (competitionModifiers.size() == 0) {
-        if (notificationBox) {
-            notificationBox->AddNotification("\nThere are no competition modifiers!");
-        }
+    if (!wrappedResults || !wrappedResults->gameplayModifiers) {
         return false;
     }
-    std::string message;
-    bool match = true;
-    for (auto itr : competitionModifiers) {
-        auto* modifiers = wrappedResults->gameplayModifiers;
-        auto checked = il2cpp_utils::GetPropertyValue<bool>(modifiers, itr.name);
-        if (!checked) continue;
-        if (*checked != itr.val) {
-            match = false;
-        }
-    }
-
-    if (match) {
-        auto* defaultModifiers = GlobalNamespace::GameplayModifiers::get_defaultModifiers();
-        void* itr = nullptr;
-        const PropertyInfo* prop;
-        auto& competitionModifierNames = Modifiers::get_competitionModifierNames();
-        while ((prop = il2cpp_functions::class_get_properties(il2cpp_functions::object_get_class(defaultModifiers), &itr))) {
-            if (!competitionModifierNames.contains(prop->name)) {
-                // Perform a check against competition allowed modifiers
-                auto* propType = prop->get->return_type;
-                if (propType->data.klassIndex == il2cpp_functions::defaults->boolean_class->this_arg.data.klassIndex) {
-                    auto defaultBool = RET_DEFAULT_UNLESS(il2cpp_utils::GetPropertyValue<bool>(defaultModifiers, prop));
-                    auto actualBool = RET_DEFAULT_UNLESS(il2cpp_utils::GetPropertyValue<bool>(wrappedResults->gameplayModifiers, prop));
-                    if (defaultBool != actualBool) {
-                        match = false;
-                        message += string_format("Modifier: %s does not match: %s", prop->name, defaultBool ? "true" : "false");
-                    }
-                }
-                else if (propType->data.klassIndex == il2cpp_functions::defaults->single_class->this_arg.data.klassIndex) {
-                    auto defaultFloat = RET_DEFAULT_UNLESS(il2cpp_utils::GetPropertyValue<float>(defaultModifiers, prop));
-                    auto actualFloat = RET_DEFAULT_UNLESS(il2cpp_utils::GetPropertyValue<float>(wrappedResults->gameplayModifiers, prop));
-                    if (defaultFloat != actualFloat) {
-                        match = false;
-                        message += string_format("Modifier: %s does not match: %f it is: %f", prop->name, defaultFloat, actualFloat);
-                    }
-                }
-                else if (propType->data.klassIndex == il2cpp_functions::defaults->int32_class->this_arg.data.klassIndex) {
-                    auto defaultInt = RET_DEFAULT_UNLESS(il2cpp_utils::GetPropertyValue<int>(defaultModifiers, prop));
-                    auto actualInt = RET_DEFAULT_UNLESS(il2cpp_utils::GetPropertyValue<int>(wrappedResults->gameplayModifiers, prop));
-                    if (defaultInt != actualInt) {
-                        match = false;
-                        message += string_format("Modifier: %s does not match: %i it is: %i", prop->name, defaultInt, actualInt);
-                    }
-                }
-            }
-        }
-    }
-    if (match) {
-        message = "Modifiers Match!";
-    }
-    getLogger().debug("Adding notification: %s", message.c_str());
-    if (notificationBox) {
-        notificationBox->AddNotification("\n" + message);
-    }
-    return match;
+    auto* gm = wrappedResults->gameplayModifiers;
+    // True iff NF
+    // TODO: Hackfix
+    return gm->get_noFailOn0Energy() &&
+            !gm->get_demoNoFail() &&
+            !gm->get_demoNoObstacles() &&
+            gm->get_energyType() == GlobalNamespace::GameplayModifiers::EnergyType::Bar &&
+            !gm->get_instaFail() &&
+            !gm->get_failOnSaberClash() &&
+            gm->get_enabledObstacleType() == GlobalNamespace::GameplayModifiers::EnabledObstacleType::All &&
+            !gm->get_noBombs() &&
+            !gm->get_fastNotes() &&
+            !gm->get_strictAngles() &&
+            !gm->get_disappearingArrows() &&
+            gm->get_songSpeed() == GlobalNamespace::GameplayModifiers::SongSpeed::Normal &&
+            !gm->get_noArrows() &&
+            !gm->get_ghostNotes();
 }

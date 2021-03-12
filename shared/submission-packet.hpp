@@ -19,6 +19,8 @@ class SubmissionPacket {
     std::string hash = "";
 
     public:
+    // Used for serialization, ensure syncronization
+    uint64_t timestamp;
     SubmissionPacket();
     SubmissionPacket(GlobalNamespace::LevelCompletionResults* results, std::string_view pin, GlobalNamespace::GameplayCoreSceneSetupData* data);
     void Serialize();
